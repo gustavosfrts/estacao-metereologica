@@ -1,0 +1,40 @@
+{% extends 'sensores/base.html' %}
+
+{%block title%} Último registro - Sensores {% endblock %}
+
+{% block content %}
+
+    <h2>Último registro</h2>
+
+    <h3>DHT 11</h3>
+    
+        <article>
+            
+            <h4> Temperatura: {{ dht11.temperatura }}ºC </h4>
+            <h4> Umidade: {{ dht11.umidade }}% </h4>
+            
+            <p class="date">
+                Data da medição {{ dht11.created_at }}
+            </p>
+
+            <hr>
+        </article>
+        
+
+    <h3>BMP 280</h3>
+    
+        <article>
+            
+            <h4> Temperatura: {{ bmp280.temperatura }}ºC </h4>
+            <h4> Pressao: {{ bmp280.pressao }}hPa </h4>
+            
+            <p class="date">
+                Data da medição {{ bmp280.created_at }}
+            </p>
+
+            <hr>
+
+        </article>
+        
+
+{% endblock %}

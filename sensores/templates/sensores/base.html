@@ -5,10 +5,22 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{% endblock %}</title>
+
+    <script>
+        setTimeout(function(){
+            window.location.reload(1);
+         }, 60000);
+    </script>
 </head>
 <body>
     <header>
         <h1>Medições</h1>
+
+        <nav>
+            <a href="/">Última medição</a>
+            <br>
+            <a href="/historico">Histórico Medições</a>
+        </nav>
     </header>
 
     <main>

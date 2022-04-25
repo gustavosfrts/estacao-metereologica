@@ -3,7 +3,7 @@ from sensores.models import Bmp280, Dht11
 
 def _get_forecast_json():
     url = 'http://api.openweathermap.org/data/2.5/weather'
-    encoded_city_name = 'Sao%20Paulo'
+    encoded_city_name = 'Serra'
     country_code = 'br'
     access_token = 'api_key'
   
@@ -28,7 +28,7 @@ def update_forecast():
             bmp_280 = Bmp280()
             
             # open weather map gives temps in Kelvin. We want celsius.              
-            temp_in_celsius = json['main']['temp'] - 273.15
+            temp_in_celsius = round((json['main']['temp'] - 273.15),2)
             dht_11.temperatura = temp_in_celsius
             # dht_11.description = json['weather'][0]['description']
             # dht_11.city = json['name']
@@ -39,6 +39,6 @@ def update_forecast():
             
             dht_11.save()
             bmp_280.save()
-            print("salvano...\n" + dht_11, bmp_280)
+            print("salvando...\n" + dht_11, bmp_280)
         except:
             pass
