@@ -5,7 +5,7 @@ def _get_forecast_json():
     url = 'http://api.openweathermap.org/data/2.5/weather'
     encoded_city_name = 'Sao%20Paulo'
     country_code = 'br'
-    access_token = '2fb2b01ffda60c72a6c7670cc478aa9d'
+    access_token = 'api_key'
   
     r = requests.get('{0}?q={1},{2}&APPID={3}'.format(
         url, 
