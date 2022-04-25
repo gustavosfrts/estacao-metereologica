@@ -1,0 +1,38 @@
+{% extends 'sensores/base.html' %}
+
+{%block title%} Sensores {% endblock %}
+
+{% block content %}
+
+    <h2>DHT 11</h2>
+    {% for dht11 in dht11s %}
+        <article>
+            
+            <h3> Temperatura: {{ dht11.temperatura }}ºC </h3>
+            <h3> Umidade: {{ dht11.umidade }}% </h3>
+            
+            <p class="date">
+                Data da medição {{ dht11.created_at }}
+            </p>
+
+            <hr>
+        </article>
+    {% endfor %}
+
+    <h2>BMP 280</h2>
+    {% for bmp280 in bmp280s %}
+        <article>
+            
+            <h3> Temperatura: {{ bmp280.temperatura }}ºC </h3>
+            <h3> Pressao: {{ bmp280.pressao }}hPa </h3>
+            
+            <p class="date">
+                Data da medição {{ bmp280.created_at }}
+            </p>
+
+            <hr>
+
+        </article>
+    {% endfor %}
+
+{% endblock %}
