@@ -1,44 +1,53 @@
 import requests
 from sensores.models import Bmp280, Dht11
+import Adafruit_DHT
+import RPi.GPIO as GPIO
+import time
+from bmp280 import BMP280
+import os
+try:
+    from smbus2 import SMBus
+except ImportError:
+    from smbus import SMBus
 
-def _get_forecast_json():
-    url = 'http://api.openweathermap.org/data/2.5/weather'
-    encoded_city_name = 'Serra'
-    country_code = 'br'
-    access_token = 'api_key'
-  
-    r = requests.get('{0}?q={1},{2}&APPID={3}'.format(
-        url, 
-        encoded_city_name, 
-        country_code, 
-        access_token))
+def _get_sensors_values():
+    
+    sensor = Adafruit_DHT.DHT11
+    GPIO.setmode(GPIO.BOARD)
+    pino_sensor = 25
+    bus = SMBus(1)
+    bmp280 = BMP280(i2c_dev=bus)
+    retorno = []
 
-    try:
-        r.raise_for_status()
-        return r.json()
-    except:
-        return None
+    umid, temp = Adafruit_DHT.read_retry(sensor, pino_sensor)
+
+    if umid is not None and temp is not None:
+        retorno.append(temp)
+        retorno.append(umid)
+        retorno.append(bmp280.get_temperature())
+        retorno.append(bmp280.get_pressure())
+        
+        return retorno
+    else:
+        raise Exception("Erro ao ler sensores.")
+    
 
       
-def update_forecast():
-    json = _get_forecast_json()
-    if json is not None:
+def update_sensors_values():
+    retorno = _get_sensors_values()
+    if retorno is not None:
         try:
             dht_11 = Dht11()
             bmp_280 = Bmp280()
             
-            # open weather map gives temps in Kelvin. We want celsius.              
-            temp_in_celsius = round((json['main']['temp'] - 273.15),2)
-            dht_11.temperatura = temp_in_celsius
-            # dht_11.description = json['weather'][0]['description']
-            # dht_11.city = json['name']
-            dht_11.umidade = json['main']['humidity']
-
-            bmp_280.temperatura = temp_in_celsius
-            bmp_280.pressao = json['main']['pressure']
+            dht_11.temperatura = retorno[0]
+            dht_11.umidade = retorno[1]
+            
+            bmp_280.temperatura = round(retorno[2], 2)
+            bmp_280.pressao = round(retorno[3], 2)
             
             dht_11.save()
             bmp_280.save()
-            print("salvando...\n" + dht_11, bmp_280)
+
         except:
             pass
